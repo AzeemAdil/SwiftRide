@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+.primary-font{
+    font-family: 'Josefin Sans';
+}
+.secondary-font{
+    font-family: 'Quicksand';
+}
+.text-color{
+    color: #2B2D42;
+}
+.background-card{
+    background-color: #F8F9FF;
+}
+.background-primary{
+    background-color: #1B1F3B;
+}
+.background-secondary{
+    background-color: #6C4AB6;
+}
+.heading-color{
+    color: azure;
+}  
