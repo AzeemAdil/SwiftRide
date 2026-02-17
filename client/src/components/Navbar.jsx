@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import Cookies from 'js-cookie';
+import api from "../utils/api";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -9,9 +10,9 @@ const Navbar = () => {
   const [isDriver, setDriver] = useState(false);
 
   useEffect(()=>{
-    const token = Cookies.get('token');
+    // Check for role cookie instead of token (token is HttpOnly)
     const role = Cookies.get("role");
-    if(token){
+    if(role){
       setLoggedin(true);
       if(role==="driver"){
         setDriver(true);
@@ -20,10 +21,18 @@ const Navbar = () => {
     
   },[])
 
-  const handleLogOut = () =>{
-    Cookies.remove('token');
-    Cookies.remove('role');
-    setLoggedin(false);
+  const handleLogOut = async () =>{
+    try {
+      await api.post('/api/logout');
+      // Clear client-side cookies (token is cleared by server)
+      Cookies.remove('role');
+      Cookies.remove('rideMakerPhoneNumber'); // Clean up phone number too
+      setLoggedin(false);
+      setDriver(false);
+      window.location.href = '/'; // Force redirect to home
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   }
 
   const toggleMenu = () => setMenuOpen(!menuOpen);

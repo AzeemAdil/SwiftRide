@@ -32,9 +32,19 @@ app.use('/api/signup', riderSignUpRouter);
 app.use('/api/signup', driverSignUpRouter);
 app.use('/api/ride', rideRouter)
 
+app.post('/api/logout', (req, res) => {
+  res.clearCookie('token');
+  res.clearCookie('role');
+  res.clearCookie('rideMakerPhoneNumber');
+  res.status(200).json({ success: true, message: "Logged out successfully" });
+});
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: "Something went wrong!" });
+  res.status(500).json({ 
+    error: "Something went wrong!",
+    details: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
 });
 
 connectDB();
